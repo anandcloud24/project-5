@@ -24,10 +24,6 @@ body {
   padding: 30px;
   width: 320px;
   border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-}
-.login-box h2 {
-  text-align: center;
 }
 input, button {
   width: 100%;
@@ -42,17 +38,15 @@ button {
 }
 
 /* DASHBOARD */
-#dashboard { display: none; }
+#dashboard, #cartPage { display: none; }
 header {
   background: #1a202c;
   color: white;
   padding: 15px;
-  font-size: 22px;
   text-align: center;
 }
-.container {
-  padding: 20px;
-}
+.container { padding: 20px; }
+
 .books {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
@@ -60,29 +54,23 @@ header {
 }
 .book-card {
   background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   padding: 15px;
+  border-radius: 8px;
   text-align: center;
 }
 .book-card img {
   width: 100%;
-  height: 260px;
+  height: 240px;
   object-fit: cover;
-  border-radius: 5px;
 }
-.price {
-  color: #2f855a;
-  font-weight: bold;
-}
-.buy-btn {
-  margin-top: 10px;
-  background: #3182ce;
-  color: white;
-  border: none;
-  padding: 8px;
-  width: 100%;
-  cursor: pointer;
+.price { color: green; font-weight: bold; }
+
+/* CART */
+.cart-item {
+  background: white;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
 }
 </style>
 </head>
@@ -92,163 +80,123 @@ header {
 <!-- LOGIN -->
 <div id="loginPage">
   <div class="login-box">
-    <h2>📘 anand books store</h2>
-    <input placeholder="Username">
-    <input type="password" placeholder="Password">
+    <h2>📘 Anand DevOps Book Store</h2>
+    <input id="username" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
     <button onclick="login()">Login</button>
   </div>
 </div>
 
 <!-- DASHBOARD -->
 <div id="dashboard">
-<header>📚 DevOps Books – Ready to Buy</header>
-
+<header>📚 DevOps Books</header>
 <div class="container">
-<div class="books">
-
-<!-- Docker -->
-<div class="book-card">
-<img src="https://covers.openlibrary.org/b/id/10523334-L.jpg">
-<h3>Docker Deep Dive</h3>
-<p>Containers & Images</p>
-<p class="price">₹499</p>
-<button class="buy-btn">Buy</button>
+<div class="books" id="bookList"></div>
+<button onclick="openCart()">🛒 Go To Cart</button>
+</div>
 </div>
 
-<!-- Kubernetes -->
-<div class="book-card">
-<img src="https://covers.openlibrary.org/b/id/11153250-L.jpg">
-<h3>Kubernetes Up & Running</h3>
-<p>Clusters & Pods</p>
-<p class="price">₹699</p>
-<button class="buy-btn">Buy</button>
-</div>
+<!-- CART PAGE -->
+<div id="cartPage">
+<header>🛒 Cart & Checkout</header>
+<div class="container">
 
-<!-- Jenkins -->
-<div class="book-card">
-<img src="https://covers.openlibrary.org/b/id/8281996-L.jpg">
-<h3>Jenkins Essentials</h3>
-<p>CI Pipelines</p>
-<p class="price">₹399</p>
-<button class="buy-btn">Buy</button>
-</div>
+<div id="cartItems"></div>
 
-<!-- GitHub -->
-<div class="book-card">
-<img src="https://covers.openlibrary.org/b/id/13518218-L.jpg">
-<h3>GitHub Mastery</h3>
-<p>Version Control</p>
-<p class="price">₹349</p>
-<button class="buy-btn">Buy</button>
-</div>
+<h3>Total: ₹<span id="totalAmount">0</span></h3>
 
-<!-- GitHub Actions -->
-<div class="book-card">
-<img src="https://avatars.githubusercontent.com/u/44036562?s=400">
-<h3>GitHub Actions</h3>
-<p>CI/CD Automation</p>
-<p class="price">₹449</p>
-<button class="buy-btn">Buy</button>
-</div>
+<input id="custName" placeholder="Customer Name">
+<input id="email" placeholder="Email">
+<input id="address" placeholder="Delivery Address">
 
-<!-- Terraform -->
-<div class="book-card">
-<img src="https://covers.openlibrary.org/b/id/12871325-L.jpg">
-<h3>Terraform in Action</h3>
-<p>Infrastructure as Code</p>
-<p class="price">₹799</p>
-<button class="buy-btn">Buy</button>
-</div>
+<button onclick="placeOrder()">Place Order</button>
+<button onclick="backToShop()">⬅ Back</button>
 
-<!-- Grafana -->
-<div class="book-card">
-<img src="https://grafana.com/static/img/menu/grafana2.svg">
-<h3>Grafana Monitoring</h3>
-<p>Dashboards</p>
-<p class="price">₹499</p>
-<button class="buy-btn">Buy</button>
-</div>
-
-<!-- Prometheus -->
-<div class="book-card">
-<img src="https://avatars.githubusercontent.com/u/3380462?s=400">
-<h3>Prometheus Guide</h3>
-<p>Metrics & Alerts</p>
-<p class="price">₹549</p>
-<button class="buy-btn">Buy</button>
-</div>
-
-<!-- Splunk -->
-<div class="book-card">
-<img src="https://avatars.githubusercontent.com/u/130104?s=400">
-<h3>Splunk Analytics</h3>
-<p>Log Analysis</p>
-<p class="price">₹699</p>
-<button class="buy-btn">Buy</button>
-</div>
-
-<!-- Grafana Loki -->
-<div class="book-card">
-<img src="https://grafana.com/static/img/menu/loki.svg">
-<h3>Grafana Loki</h3>
-<p>Log Aggregation</p>
-<p class="price">₹499</p>
-<button class="buy-btn">Buy</button>
-</div>
-
-<!-- Kibana -->
-<div class="book-card">
-<img src="https://avatars.githubusercontent.com/u/6764390?s=400">
-<h3>Kibana Visuals</h3>
-<p>Elastic Stack</p>
-<p class="price">₹449</p>
-<button class="buy-btn">Buy</button>
-</div>
-
-<!-- Maven -->
-<div class="book-card">
-<img src="https://avatars.githubusercontent.com/u/47359?s=400">
-<h3>Apache Maven</h3>
-<p>Build Automation</p>
-<p class="price">₹299</p>
-<button class="buy-btn">Buy</button>
-</div>
-
-<!-- SonarQube -->
-<div class="book-card">
-<img src="https://avatars.githubusercontent.com/u/545988?s=400">
-<h3>SonarQube</h3>
-<p>Code Quality</p>
-<p class="price">₹399</p>
-<button class="buy-btn">Buy</button>
-</div>
-
-<!-- OpenTofu -->
-<div class="book-card">
-<img src="https://opentofu.org/img/logo.svg">
-<h3>OpenTofu IaC</h3>
-<p>Open Source Terraform</p>
-<p class="price">₹549</p>
-<button class="buy-btn">Buy</button>
-</div>
-
-<!-- GitLab CI/CD -->
-<div class="book-card">
-<img src="https://avatars.githubusercontent.com/u/1086321?s=400">
-<h3>GitLab CI/CD</h3>
-<p>DevOps Pipelines</p>
-<p class="price">₹599</p>
-<button class="buy-btn">Buy</button>
-</div>
-
-</div>
 </div>
 </div>
 
 <script>
+const backendURL = "http://98.88.74.53:5000/place-order";
+
+const books = [
+ {name:"Docker Deep Dive", price:499, img:"https://covers.openlibrary.org/b/id/10523334-L.jpg"},
+ {name:"Kubernetes Up & Running", price:699, img:"https://covers.openlibrary.org/b/id/11153250-L.jpg"},
+ {name:"Jenkins Essentials", price:399, img:"https://covers.openlibrary.org/b/id/8281996-L.jpg"},
+ {name:"GitHub Mastery", price:349, img:"https://covers.openlibrary.org/b/id/13518218-L.jpg"},
+ {name:"Terraform in Action", price:799, img:"https://covers.openlibrary.org/b/id/12871325-L.jpg"},
+ {name:"Grafana Monitoring", price:499, img:"https://grafana.com/static/img/menu/grafana2.svg"},
+ {name:"Prometheus Guide", price:549, img:"https://avatars.githubusercontent.com/u/3380462?s=400"},
+ {name:"Splunk Analytics", price:699, img:"https://avatars.githubusercontent.com/u/130104?s=400"}
+];
+
+let cart = [];
+
 function login() {
   document.getElementById("loginPage").style.display="none";
   document.getElementById("dashboard").style.display="block";
+  loadBooks();
+}
+
+function loadBooks() {
+  const list = document.getElementById("bookList");
+  books.forEach(book => {
+    list.innerHTML += `
+      <div class="book-card">
+        <img src="${book.img}">
+        <h3>${book.name}</h3>
+        <p class="price">₹${book.price}</p>
+        <button onclick='addToCart(${JSON.stringify(book)})'>Buy</button>
+      </div>`;
+  });
+}
+
+function addToCart(book) {
+  cart.push(book);
+  alert(book.name + " added to cart");
+}
+
+function openCart() {
+  document.getElementById("dashboard").style.display="none";
+  document.getElementById("cartPage").style.display="block";
+  renderCart();
+}
+
+function backToShop() {
+  document.getElementById("cartPage").style.display="none";
+  document.getElementById("dashboard").style.display="block";
+}
+
+function renderCart() {
+  let total = 0;
+  const items = document.getElementById("cartItems");
+  items.innerHTML = "";
+  cart.forEach(b => {
+    total += b.price;
+    items.innerHTML += `<div class="cart-item">${b.name} - ₹${b.price}</div>`;
+  });
+  document.getElementById("totalAmount").innerText = total;
+}
+
+function placeOrder() {
+  const order = {
+    name: document.getElementById("custName").value,
+    email: document.getElementById("email").value,
+    address: document.getElementById("address").value,
+    cart: cart,
+    total: document.getElementById("totalAmount").innerText
+  };
+
+  fetch(backendURL, {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify(order)
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert("Order placed successfully!");
+    cart = [];
+    backToShop();
+  });
 }
 </script>
 
